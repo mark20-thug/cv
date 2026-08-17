@@ -120,24 +120,12 @@
   .btn-ghost{ border:1px solid var(--border); color:var(--text); }
   .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
 
-  /* Hero photo upload panel */
+  /* Hero photo */
   .photo-panel{
-    aspect-ratio:4/5; border-radius:var(--radius); border:1px dashed var(--border);
-    background:var(--surface); position:relative; overflow:hidden;
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    aspect-ratio:4/5; border-radius:var(--radius); border:1px solid var(--border);
+    background:var(--surface); overflow:hidden;
     background-size:cover; background-position:center;
   }
-  .photo-panel:hover{ border-color:var(--accent); }
-  .photo-panel .placeholder{ text-align:center; color:var(--muted); padding:24px; }
-  .photo-panel .placeholder svg{ width:42px; height:42px; margin-bottom:12px; opacity:0.6; }
-  .photo-panel .placeholder .label{ font-size:13px; font-family:'JetBrains Mono'; }
-  .photo-panel .edit-tag{
-    position:absolute; bottom:12px; right:12px; background:var(--glass); backdrop-filter:blur(4px);
-    font-size:11px; font-family:'JetBrains Mono'; padding:6px 10px; border-radius:999px; border:1px solid var(--border);
-    opacity:0; transition:opacity .18s ease;
-  }
-  .photo-panel:hover .edit-tag{ opacity:1; }
-  .photo-panel.has-image .placeholder{ display:none; }
 
   /* ---------- TICKER ---------- */
   .ticker-wrap{ border-top:1px solid var(--border); border-bottom:1px solid var(--border); overflow:hidden; padding:16px 0; }
@@ -231,7 +219,7 @@
 <nav>
   <div class="wrap">
     <div class="nav-left">
-      <div class="avatar-sm mono" id="nav-avatar" title="Click to upload your photo" style="background-image:url('profile.jpg');"></div>
+      <div class="avatar-sm mono" style="background-image:url('profile.jpg');"></div>
       <span class="nav-name">Sserunjogi Mark</span>
     </div>
     <div class="nav-links">
@@ -266,17 +254,8 @@
       </div>
     </div>
 
-    <div class="photo-panel has-image" id="hero-photo" title="Click to upload your photo" style="background-image:url('profile.jpg');">
-      <div class="placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-        <div class="label">CLICK TO ADD PHOTO</div>
-      </div>
-      <div class="edit-tag">change photo</div>
-    </div>
+    <div class="photo-panel has-image" style="background-image:url('profile.jpg');"></div>
   </div>
-
-  <input type="file" id="hero-photo-input" accept="image/*">
-  <input type="file" id="nav-avatar-input" accept="image/*">
 </header>
 
 <div class="ticker-wrap">
@@ -511,48 +490,6 @@
   const set = skills.map(s => `<span>${s}</span>`).join('');
   tickerEl.innerHTML = set + set;
 
-  // ---- Photo upload (session preview only — see note below) ----
-  function wireUpload(triggerEl, inputEl, onLoad){
-    triggerEl.addEventListener('click', () => inputEl.click());
-    inputEl.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => onLoad(ev.target.result);
-      reader.readAsDataURL(file);
-    });
-  }
-
-  const heroPhoto = document.getElementById('hero-photo');
-  const heroInput = document.getElementById('hero-photo-input');
-  const savedHero = localStorage.getItem('hero-photo');
-  if(savedHero){
-    heroPhoto.style.backgroundImage = `url(${savedHero})`;
-    heroPhoto.classList.add('has-image');
-  } else {
-    heroPhoto.classList.add('has-image');
-  }
-  wireUpload(heroPhoto, heroInput, (dataUrl) => {
-    heroPhoto.style.backgroundImage = `url(${dataUrl})`;
-    heroPhoto.classList.add('has-image');
-    localStorage.setItem('hero-photo', dataUrl);
-  });
-
-  const navAvatar = document.getElementById('nav-avatar');
-  const navInput = document.getElementById('nav-avatar-input');
-  const savedAvatar = localStorage.getItem('nav-avatar');
-  if(savedAvatar){
-    navAvatar.style.backgroundImage = `url(${savedAvatar})`;
-    navAvatar.textContent = '';
-  } else {
-    navAvatar.style.backgroundImage = "url('profile.jpg')";
-    navAvatar.textContent = '';
-  }
-  wireUpload(navAvatar, navInput, (dataUrl) => {
-    navAvatar.style.backgroundImage = `url(${dataUrl})`;
-    navAvatar.textContent = '';
-    localStorage.setItem('nav-avatar', dataUrl);
-  });
 </script>
 
 </body>
